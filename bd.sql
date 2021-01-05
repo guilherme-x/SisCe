@@ -1,3 +1,4 @@
+-- BD
 create table usuario(
 	idusuario bigserial primary key not null,
 	nome varchar(80) not null,
