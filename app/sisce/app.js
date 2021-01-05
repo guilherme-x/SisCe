@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-
+const sess = require('express-session')
 const app = express();
 
 // ==> Rotas da API:
@@ -20,5 +20,7 @@ app.use('/sisce', productRoute);
 app.use('/sisce', userRoute);
 app.use('/sisce', contactRoute);
 app.use('/sisce', acquisitionRoute);
+
+var expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 hour
 
 module.exports = app;

@@ -5,4 +5,5 @@ const contatos = require('../controllers/contatos.js')
 // ==> Rota responsável por criar um novo 'Usuário': (POST): localhost:3000/sisce/usuarios
 router.post('/contatos', contatos.createContact);
 router.get('/contatos', contatos.listAll);
+router.post('/contatos/delete', contatos.Delete);
 module.exports = router;
