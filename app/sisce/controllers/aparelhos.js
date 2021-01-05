@@ -12,7 +12,7 @@ exports.createProduct = async (req, res) => {
   res.status(201).send({
     message: "Product added successfully!",
     body: {
-      product: { marca, modelo, obs }
+      aparelho: { marca, modelo, obs }
     },
   });
 };
