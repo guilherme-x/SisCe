@@ -1,0 +1,12 @@
+{
+  "name": "sisce",
+  "displayName": "sisce",
+  "expo": {
+    "name": "sisce",
+    "slug": "sisce",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
