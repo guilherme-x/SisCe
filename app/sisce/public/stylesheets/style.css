@@ -6,3 +6,9 @@ body h1{
   margin: 0 auto 0 auto;
   display: flex;
 }
+#login{
+  width: 50%;
+  margin:100px auto 0 auto;
+  background-color: #000;
+  color: gainsboro;
+}

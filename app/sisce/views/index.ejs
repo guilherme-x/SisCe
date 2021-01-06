@@ -1,12 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../public/stylesheets/style.css">
-  <title>Document</title>
+<title>Session Management in NodeJS using Node and Express</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    var email,pass;
+    $("#submit").click(function(){
+        email=$("#email").val();
+        pass=$("#password").val();
+        /*
+        * Perform some validation here.
+        */
+        $.post("/login",{email:email,pass:pass},function(data){
+            if(data==='done') {
+                window.location.href="/admin";
+            }
+        });
+      });
+});
+</script>
 </head>
 <body>
-  <h1>Servidor rodando...</h1>
+<input type="text" size="40" placeholder="Type your email" id="email"><br />
+<input type="password" size="40" placeholder="Type your password" id="password"><br />
+<input type="button" value="Submit" id="submit">
 </body>
 </html>
