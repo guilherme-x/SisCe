@@ -1,0 +1,25 @@
+{
+  "name": "sisce-micks",
+  "homepage": "https://github.com/creativetimofficial/material-kit-react",
+  "authors": [
+    "guilherme"
+  ],
+  "description": "Sistema de Controle de Equipamentos",
+  "main": "dist/index.js",
+  "keywords": [
+    "material",
+    "design",
+    "material-ui",
+    "google",
+    "twitter"
+  ],
+  "license": "Creative TIM License",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}

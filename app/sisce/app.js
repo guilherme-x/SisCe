@@ -5,6 +5,7 @@ const app = express();
 
 // ==> Rotas da API:
 const index = require('./routes/index');
+const login = require('./routes/checkUser');
 const productRoute = require('./routes/aparelhos');
 const userRoute = require('./routes/usuarios');
 const contactRoute = require('./routes/contatos');
@@ -16,6 +17,7 @@ app.use(express.json({ type: 'application/vnd.api+json' }));
 app.use(cors());
 
 app.use(index);
+app.use('/sisce',login);
 app.use('/sisce', productRoute);
 app.use('/sisce', userRoute);
 app.use('/sisce', contactRoute);
