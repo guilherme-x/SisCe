@@ -1,4 +1,5 @@
-import React from "react";
+import React, {componentDidMount} from 'react';
+import {useState} from 'react';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -11,58 +12,109 @@ import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
+import classNames from "classnames";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import img from "react";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-
+import Parallax from "components/Parallax/Parallax.js";
+import infoArea from "components/InfoArea/InfoArea.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
-
+import PropTypes from 'prop-types';
 import image from "assets/img/back.jpg";
 import logoMicks from "assets/img/micks.png";
 
+
 const useStyles = makeStyles(styles);
-export default function LoginPage(props) {
+
+export default function LoginPage({setToken}) {
+  
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
-  const { ...rest } = props;
+
+  const [login, setLogin] = useState("");
+  const [senha, setSenha] = useState("");
+  
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  
+  var urlencoded = new URLSearchParams();
+  urlencoded.append("login", login);
+  urlencoded.append("senha", senha);
+  
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: urlencoded,
+    redirect: 'follow'
+  };
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    fetch("http://localhost:3003/sisce/login", requestOptions)
+    .then(response => response.text())
+    .then(result => alert(result))
+    .catch(error => console.log('error', error));
+
+}
+
+
+
+const imageClasses = classNames(
+  classes.imgRaised,
+  classes.imgRoundedCircle,
+  classes.imgFluid
+);
   return (
     <div> 
-      <Header
-        absolute
-        color="transparent"
-        brand="SisCe"
-        {...rest}
-      />
       <div
         className={classes.pageHeader}
         style={{
           backgroundImage: "url(" + image + ")",
           backgroundSize: "cover",
-          backgroundPosition: "top center"
+          backgroundPosition: "top center",
+          filter:"brightness(110%)"
         }}
       >
+      <img src ={require("assets/img/micks.png")}
+      style={{
+        transform:"opacity(500%)",
+        background:"none",
+        display:"flex",
+        flex:"1",
+        paddingTop:"30px",
+        marginBottom:"-80px",
+        width:"30%",
+        marginRight:"auto",
+        marginLeft:"auto",
+      }}
+      alt="..."/>
         <div className={classes.container}>
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
-                <form action="172.17.1.190:3003/sisce/login" method="post" className={classes.form}>
-                  <CardHeader color="info" className={classes.cardHeader}>
+                <form action="http://172.17.1.190:3003/sisce/login" method="post" onSubmit={handleSubmit} className={classes.form}>
+                  <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Login</h4>
                   </CardHeader>
                   <CardBody>
                     <CustomInput
+                      /* value={this.state.value} */
+                      name="login"
                       labelText="usuário"
                       id="login"
+                      /* onChange={this.handleChange} */
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
+                        onChange:e => setLogin(e.target.value),
                         type: "text",
                         endAdornment: (
                           <InputAdornment position="end">
@@ -78,6 +130,7 @@ export default function LoginPage(props) {
                         fullWidth: true
                       }}
                       inputProps={{
+                        onChange:e => setSenha(e.target.value),
                         type: "password",
                         endAdornment: (
                           <InputAdornment position="end">
@@ -91,7 +144,7 @@ export default function LoginPage(props) {
                     />
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button value="submit" simple color="info" size="lg">
+                    <Button value="submit" type="submit" simple color="primary" size="lg">
                       Entrar
                     </Button>
                   </CardFooter>
@@ -104,4 +157,7 @@ export default function LoginPage(props) {
       </div>
     </div>
   );
-}
+};
+LoginPage.propTypes = {
+  setToken: PropTypes.func.isRequired
+};
