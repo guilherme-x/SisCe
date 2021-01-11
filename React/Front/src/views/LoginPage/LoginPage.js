@@ -25,22 +25,23 @@ import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import PropTypes from 'prop-types';
 import image from "assets/img/back.jpg";
 import logoMicks from "assets/img/micks.png";
+import { withRouter } from 'react-router-dom'; 
+import { createHashHistory } from 'history'
+export const history = createHashHistory()
 
 
 const useStyles = makeStyles(styles);
-
+// export const obj ='';
+export var isAuthenticated = () => '';
 export default function LoginPage({setToken}) {
-  
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
-
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
-  
-
+ 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
   
@@ -54,14 +55,18 @@ export default function LoginPage({setToken}) {
     body: urlencoded,
     redirect: 'follow'
   };
+  var output;
   const handleSubmit = (evt) => {
+    const resultado = (res) => {
+      isAuthenticated = () => res 
+     return null;
+     };
     evt.preventDefault();
-
-    fetch("http://localhost:3003/sisce/login", requestOptions)
+    fetch("http://172.17.1.190:3003/sisce/login", requestOptions)
     .then(response => response.text())
-    .then(result => alert(result))
+    .then(result => resultado(result))
     .catch(error => console.log('error', error));
-
+    history.push('/app#');
 }
 
 
@@ -99,7 +104,7 @@ const imageClasses = classNames(
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
-                <form action="http://172.17.1.190:3003/sisce/login" method="post" onSubmit={handleSubmit} className={classes.form}>
+                <form action="/app" method="post" onSubmit={handleSubmit} className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Login</h4>
                   </CardHeader>
@@ -157,7 +162,4 @@ const imageClasses = classNames(
       </div>
     </div>
   );
-};
-LoginPage.propTypes = {
-  setToken: PropTypes.func.isRequired
 };

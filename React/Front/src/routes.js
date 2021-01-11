@@ -7,28 +7,26 @@ import "assets/scss/material-kit-react.scss?v=1.9.0";
 import LoginPage from "views/LoginPage/LoginPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 
-import { isAuthenticated } from "./auth";
-
+import { isAuthenticated } from "views/LoginPage/LoginPage.js";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
+/* const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
-        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+        <Redirect to={{ pathname: "/#", state: { from: props.location } }} />
       )
     }
   />
-);
+); */
 
 const Routes = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={LoginPage} />
-      <PrivateRoute path="/app" component={() => <h1>Você está logado</h1>} />
+      <Route path="/app" component={() =>  <body><script>alert('ok')</script><h1>Sucesso</h1></body>} />
     </Switch>
   </BrowserRouter>
 );
