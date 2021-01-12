@@ -49,10 +49,11 @@ export default function ProfilePage(props) {
     'headers': {
     }
   };
-  request(options, function (error, response) {
+  const consulta = request(options, function (error, response) {
     if (error) throw new Error(error);
-   var res = response.body;
+   var [lista, setLista] = useState(response.body);
   });
+  alert(consulta.useState);
 return(
 
   <div>
