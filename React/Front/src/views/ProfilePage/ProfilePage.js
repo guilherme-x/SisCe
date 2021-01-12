@@ -17,6 +17,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import img from "react";
+import {JsonToTable} from "react-json-to-table";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Parallax from "components/Parallax/Parallax.js";
@@ -40,20 +41,18 @@ export default function ProfilePage(props) {
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
-  
-  var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
+
+  var request = require('request');
+  var options = {
+    'method': 'GET',
+    'url': 'http://172.17.1.190:3003/sisce/aparelhos',
+    'headers': {
+    }
   };
-  const resultado = (res) => {
-    var saida = res;
-    alert(saida);
-   return null;
-   };
-  fetch("172.17.1.190:3003/sisce/aparelhos", requestOptions)
-    .then(response => resultado(response.text()))
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+  request(options, function (error, response) {
+    if (error) throw new Error(error);
+   var res = response.body;
+  });
 return(
 
   <div>
@@ -76,9 +75,7 @@ return(
           </CardHeader>
           <CardBody>
           <List>
-            <ListItem button>
-              <ListItemText primary="Item 1"/>
-            </ListItem>
+{/*             <JsonToTable json={saida}/> */}
           </List>
           </CardBody>
           <CardFooter>

@@ -66,7 +66,7 @@ export default function LoginPage({setToken}) {
     .then(response => response.text())
     .then(result => resultado(result))
     .catch(error => console.log('error', error));
-    history.push('/app#');
+    history.push('/painel');
 }
 
 
