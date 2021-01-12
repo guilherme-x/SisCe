@@ -25,6 +25,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 const Routes = () => (
   <BrowserRouter>
     <Switch>
+      <Route path='/painel' component={ProfilePage}/>
       <Route exact path="/" component={LoginPage} />
       <Route path="/app" component={() =>  <body><script>alert('ok')</script><h1>Sucesso</h1></body>} />
     </Switch>

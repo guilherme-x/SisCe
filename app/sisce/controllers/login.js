@@ -16,9 +16,9 @@ exports.login = async (req, res) => {
                     [user, senha]
                 );
                 if(response.rowCount < 1){
-                    res.status(200).send('Senha incorreta');
+                    res.status(200).send('false');
                 }else{
-                    res.status(200).send('Logado com Sucesso!');
+                    res.status(200).send('true');
 
                 }
               
