@@ -18,7 +18,7 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.listAll = async (req, res) => {
-  const response = await db.query('SELECT * FROM aparelho ORDER BY marca ASC');
+  const response = await db.query('SELECT marca as Marca, modelo as Modelo, sistema_operacional as "Sistema Operacional" FROM aparelho ORDER BY marca ASC');
   res.status(200).send(response.rows);
 
 };
