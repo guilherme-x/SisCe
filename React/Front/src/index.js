@@ -6,7 +6,7 @@ import {useState} from 'react';
 import "assets/scss/material-kit-react.scss?v=1.9.0";
 // pages for this product
 import LoginPage from "views/LoginPage/LoginPage.js";
-import ProfilePage from "views/ProfilePage/ProfilePage.js";
+
 
 import App from './App';
 

@@ -26,8 +26,7 @@ import PropTypes from 'prop-types';
 import image from "assets/img/back.jpg";
 import logoMicks from "assets/img/micks.png";
 import { withRouter } from 'react-router-dom'; 
-import { createHashHistory } from 'history'
-export const history = createHashHistory()
+import history from "../../history";
 
 
 const useStyles = makeStyles(styles);
@@ -44,7 +43,7 @@ export default function LoginPage({setToken}) {
  
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-  
+  var [lista,setLista] = useState([]);
   var urlencoded = new URLSearchParams();
   urlencoded.append("login", login);
   urlencoded.append("senha", senha);
@@ -56,17 +55,20 @@ export default function LoginPage({setToken}) {
     redirect: 'follow'
   };
   var output;
-  const handleSubmit = (evt) => {
-    const resultado = (res) => {
-      isAuthenticated = () => res 
-     return null;
-     };
+  async function handleSubmit(evt){
+    
     evt.preventDefault();
-    fetch("http://172.17.1.190:3003/sisce/login", requestOptions)
+    await fetch("https://sisce.herokuapp.com/sisce/login", requestOptions)
     .then(response => response.text())
-    .then(result => resultado(result))
+    .then(result => lista.setLista = result)
     .catch(error => console.log('error', error));
-    history.push('/painel');
+    
+    if (lista.setLista == "true"){
+      localStorage.setItem('app-token',"true");
+      history.push('/painel');
+    }else{
+      alert("Informações Incorretas");
+    }
 }
 
 
@@ -104,23 +106,22 @@ const imageClasses = classNames(
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
-                <form action="/app" method="post" onSubmit={handleSubmit} className={classes.form}>
+                <form  onSubmit={handleSubmit} className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Login</h4>
                   </CardHeader>
                   <CardBody>
                     <CustomInput
-                      /* value={this.state.value} */
                       name="login"
                       labelText="usuário"
                       id="login"
-                      /* onChange={this.handleChange} */
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         onChange:e => setLogin(e.target.value),
                         type: "text",
+                        required:true,
                         endAdornment: (
                           <InputAdornment position="end">
                             <People className={classes.inputIconsColor} />
@@ -137,6 +138,7 @@ const imageClasses = classNames(
                       inputProps={{
                         onChange:e => setSenha(e.target.value),
                         type: "password",
+                        required:"true",
                         endAdornment: (
                           <InputAdornment position="end">
                             <Icon className={classes.inputIconsColor}>
