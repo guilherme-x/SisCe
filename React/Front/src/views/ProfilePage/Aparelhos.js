@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { DataGrid } from '@material-ui/data-grid';
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -19,9 +20,32 @@ import HeaderLinks from 'components/Header/HeaderLinks';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Primary from 'components/Typography/Primary';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles(styles);
 
+
 export default function Aparelhos() {
+
+  const width = window.innerWidth;
+  console.log('width:'+width/6.9)
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70, hide: true },
+    { field: 'marca', headerName: 'Marca', width: width/7.2 },
+    { field: 'modelo', headerName: 'Modelo', width: width/7.2 },
+    { field: 'so', headerName: 'Sistema Operacional', width: width/6.9 },
+    { field: 'processador', headerName: 'Processador', width: width/6.9 },
+    { field: 'mac', headerName: 'Mac', width: width/6.9 },
+    { field: 'obs', headerName: 'Observações', width: width/6.9 },
+  ];
+
+
   const classes = useStyles();
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function () {
@@ -33,73 +57,26 @@ export default function Aparelhos() {
     redirect: 'follow',
   };
 
-  fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptions)
-    .then(response => response.json())
-    .then(result => lista.setLista = (result))
-    .catch(error => console.log('error', error));
-  
-    var saida = []
+  async function listar() {
+    await fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptions)
+      .then(response => response.json())
+      .then(result => lista.setLista = (result))
+      .catch(error => console.log('error', error));
+  }
+  listar();
+  var saida = []
   var obj = ([[lista.setLista][0]][0]);
   for (var i in obj)
     saida.push(obj[i]);
   console.log(saida);
+  const height = window.innerHeight;
+  console.log(height);
   return (
-
-    <div>
-      <div
-        className={classes.pageHeader}
-        style={{
-          backgroundImage: "url(" + image + ")",
-          backgroundSize: "cover",
-          backgroundPosition: "top center",
-          filter: "brightness(110%)"
-        }}
-      >
-        <Header>
-          <ul>
-            <a><li>Cadastrar Aparelho</li></a>
-            <a><li>Sair</li></a>
-          </ul>
-        </Header>
-        <div className={classes.container}>
-          <GridContainer justify="center">
-
-            <GridItem xs={12} sm={12} md={10}>
-              <Card className={classes[cardAnimaton]}>
-                <CardHeader color="primary" className={classes.cardHeader}>
-                  <h4>Aparelhos</h4>
-                </CardHeader>
-                <CardBody>
-                  <ul>
-                    {saida.map(saida => (
-                      <li style={{border:'solid 1px #023a65',
-                                  padding:'8px',
-                                  borderRadius:'4px',
-                                  listStyle:'none',
-                                  marginBottom:'8px'
-                                }} key={saida.idaparelho}>
-                        <h4>
-                          <strong>Marca: </strong>
-                          {saida.marca}
-                          <strong style={{marginLeft:'20px'}} >   Modelo: </strong>
-                          {saida.modelo}
-                          <strong style={{marginLeft:'20px'}} >   Sistema Operacional: </strong>
-                          {saida.so}
-                          <a href=''><Delete style={{float:'right'}} color='error' /><Edit style={{float:'right', color:'#013b67'}}/></a>
-
-                        </h4>
-                      </li>
-                    ))}
-                  </ul>
-                </CardBody>
-                <CardFooter>
-                </CardFooter>
-              </Card>
-            </GridItem>
-          </GridContainer>
-        </div>
+    <div style={{ marginTop: "-50px" }}>
+      <h3>Aparelhos Cadastrados</h3>
+      <div style={{ height:height/2, width: '100%', border: "solid 1px #0b102d", borderRadius: '4px' }}>
+        <DataGrid rows={saida} columns={columns} pageSize={100} checkboxSelection />
       </div>
     </div>
   );
-
 }

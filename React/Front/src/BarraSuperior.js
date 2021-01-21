@@ -15,8 +15,31 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { createMuiTheme } from '@material-ui/core/styles';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import clsx from 'clsx';
+import LaptopIcon from '@material-ui/icons/Laptop';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import GroupIcon from '@material-ui/icons/Group';
+import HistoryIcon from '@material-ui/icons/History';
+import PersonAddIcon from '@material-ui/icons/PersonAdd'; import Fab from '@material-ui/core/Fab';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import history from "../src/history";
 
 const useStyles = makeStyles((theme) => ({
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
   grow: {
     flexGrow: 1,
   },
@@ -81,6 +104,69 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+  function Sair(){
+    localStorage.clear();
+    history.push('/')
+  }
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const list = (anchor) => (
+    <div
+      className={clsx(classes.list, {
+        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+      })}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        {['Aparelhos', 'Locações', 'Colaboradores', 'Histórico'].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>{
+              {
+                0: <LaptopIcon />,
+                1: <AssignmentIcon />,
+                2: <GroupIcon/>,
+                3: <HistoryIcon/>
+              }[index]
+            }</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['Cadastrar Usuário', 'Gerenciar Usuários', 'Log Out'].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>{
+                {
+                  0: <PersonAddIcon />,
+                  1: <SupervisedUserCircleIcon/>,
+                  2: <ExitToAppIcon />
+                }[index]
+              }</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+
+
+
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -108,6 +194,7 @@ export default function PrimarySearchAppBar() {
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
+      style={{ backgroundColor: "#0b102d" }}
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
@@ -133,19 +220,9 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} style={{backgroundColor:"#00093c"}}>
-            <MailIcon />
-          </Badge>
-        </IconButton>
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
         <p>Notifications</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
@@ -164,9 +241,10 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="fixed">
+        <Toolbar style={{ backgroundColor: "#0b102d" }}>
           <IconButton
+            onClick={toggleDrawer('left', true)}
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -182,7 +260,7 @@ export default function PrimarySearchAppBar() {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Buscar"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -193,14 +271,10 @@ export default function PrimarySearchAppBar() {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color ="secondary">
-                <MailIcon />
-              </Badge>
+              <MailIcon />
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              <NotificationsIcon />
             </IconButton>
             <IconButton
               edge="end"
@@ -228,6 +302,20 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <div>
+        {['left'].map((anchor) => (
+          <React.Fragment key={anchor}>
+            <SwipeableDrawer
+              anchor={anchor}
+              open={state[anchor]}
+              onClose={toggleDrawer(anchor, false)}
+              onOpen={toggleDrawer(anchor, true)}
+            >
+              {list(anchor)}
+            </SwipeableDrawer>
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 }

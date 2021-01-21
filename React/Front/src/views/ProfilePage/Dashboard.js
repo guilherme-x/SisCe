@@ -1,5 +1,5 @@
-import React, {componentDidMount} from 'react';
-import {useState} from 'react';
+import React, { componentDidMount } from 'react';
+import { useState } from 'react';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -27,12 +27,48 @@ import image from "assets/img/back.jpg";
 import logoMicks from "assets/img/micks.png";
 import { withRouter } from 'react-router-dom';
 import PrimarySearchAppBar from "../../BarraSuperior";
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container'
+import CustomizedMenu from "./Menu"
+import Aparelhos from "./Aparelhos";
+import CustomizedTables from "./Table"
+import OutLinedCard from "./Counts"
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+}));
 
-export default function Dashboard(){
+export default function Dashboard() {
 
-return(
+  const classes = useStyles();
+
+  return (
     <div>
-        <PrimarySearchAppBar/>
+      <PrimarySearchAppBar style={{ backgroundColor: "#0b102d" }} />
+      <div>
+        <br /><br /><br />
+      </div>
+
+      <Container fixed>
+        <GridContainer>
+          <GridItem>
+            <CustomizedMenu/>
+          </GridItem>
+        </GridContainer>
+        <OutLinedCard/>
+        <CustomizedTables/>
+      </Container>
     </div>
-)
+  )
 }
