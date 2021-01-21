@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
     root: {
@@ -30,7 +30,7 @@ export default function OutlinedCard() {
       redirect: 'follow',
     };
      var saida = []
-    async function listar() {
+    async function listarAparelhos() {
       await fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptions)
         .then(response => response.json())
         .then(result => setLista(result))
@@ -39,7 +39,6 @@ export default function OutlinedCard() {
     var obj = ([[lista][0]][0]);
     for (var i in obj)
       saida.push(obj[i]);
-    listar();
     
 // FETCH USUÁRIOS
 var [listaUsuarios, setListaUsuarios] = useState([]);
@@ -57,10 +56,16 @@ async function listarUsuarios() {
 var obj = ([[listaUsuarios][0]][0]);
 for (var i in obj)
   saidaUsuarios.push(obj[i]);
-listarUsuarios();
 
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
+    useEffect(() => {
+        const interval = setInterval(() => {
+          listarAparelhos();
+          listarUsuarios();
+        }, 5000);
+        return () => clearInterval(interval);
+      }, []);
 
     return (
         <div style={{ display: "flex", marginBottom:"2em", marginTop:"2em" }}>

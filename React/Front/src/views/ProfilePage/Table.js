@@ -93,7 +93,7 @@ export default function CustomizedTables() {
   var obj = ([[listaAparelhos][0]][0]);
   for (var i in obj)
     saidaAparelhos.push(obj[i]);
-  listarAparelhos();
+
 
   // FETCH USUÁRIOS
 
@@ -112,10 +112,13 @@ export default function CustomizedTables() {
   var obj = ([[listaUsuarios][0]][0]);
   for (var i in obj)
     saidaUsuarios.push(obj[i]);
-  listarUsuarios();
 
   const classes = useStyles();
-
+function fetchData(){
+  listarUsuarios();
+  listarAparelhos();
+}
+window.onload = fetchData;
   return (
     <div>
       <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
@@ -144,8 +147,8 @@ export default function CustomizedTables() {
                 <StyledTableCell align="center">{saidaAparelhos.processador}</StyledTableCell>
                 <StyledTableCell align="center">{saidaAparelhos.obs}</StyledTableCell>
                 <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
-                  <FormControlLabel style={{marginLeft:"15px"}}
-                    control={<PurpleSwitch  onChange={handleChange} name="checkedA" />}
+                  <FormControlLabel style={{ marginLeft: "15px" }}
+                    control={<PurpleSwitch onChange={handleChange} name="checkedA" />}
                   />
                 </StyledTableCell>
               </StyledTableRow>
@@ -179,8 +182,8 @@ export default function CustomizedTables() {
                 <StyledTableCell align="center">{saidaUsuarios.cargo}</StyledTableCell>
                 <StyledTableCell align="center">{saidaUsuarios.setor}</StyledTableCell>
                 <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
-                  <FormControlLabel style={{marginLeft:"15px"}}
-                    control={<PurpleSwitch  onChange={handleChange} name="checkedA" />}
+                  <FormControlLabel style={{ marginLeft: "15px" }}
+                    control={<PurpleSwitch onChange={handleChange} name="checkedA" />}
                   />
                 </StyledTableCell>
               </StyledTableRow>

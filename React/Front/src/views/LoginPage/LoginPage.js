@@ -23,6 +23,8 @@ import Parallax from "components/Parallax/Parallax.js";
 import infoArea from "components/InfoArea/InfoArea.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import PropTypes from 'prop-types';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import image from "assets/img/back.jpg";
 import logoMicks from "assets/img/micks.png";
 import { withRouter } from 'react-router-dom'; 
@@ -55,8 +57,26 @@ export default function LoginPage({setToken}) {
     redirect: 'follow'
   };
   var output;
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const handleCloseLoading = () => {
+      setOpenLoading(false);
+  };
+  const handleToggleLoading = () => {
+      setOpenLoading(!openLoading);
+  };
+
+  function SimpleBackdrop() {
+
+      return (
+          <div>
+              <Backdrop className={classes.backdrop} open={openLoading} onClick={handleCloseLoading}>
+                  <CircularProgress color="inherit" />
+              </Backdrop>
+          </div>
+      );
+  }
   async function handleSubmit(evt){
-    
+    handleCloseLoading();
     evt.preventDefault();
     await fetch("https://sisce.herokuapp.com/sisce/login", requestOptions)
     .then(response => response.text())
@@ -162,6 +182,7 @@ const imageClasses = classNames(
         </div>
         {/* <Footer whiteFont /> */}
       </div>
+      <SimpleBackdrop/>
     </div>
   );
 };

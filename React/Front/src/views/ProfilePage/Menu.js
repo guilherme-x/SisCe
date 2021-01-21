@@ -656,39 +656,44 @@ export default function CustomizedMenus() {
 
     }
 
-    var [lista, setLista] = useState([]);
-    var requestOptionsAparelhoAq = {
-        method: 'GET',
-        redirect: 'follow',
-    };
-    fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptionsAparelhoAq)
-        .then(response => response.json())
-        .then(result => lista.setLista = (result))
-        .catch(error => console.log('error', error));
+    // FETCH APARELHOS
+    var [ListaAparelhosAq, setListaAparelhosAq] = useState([]);
 
-    var saida = []
-    var obj = ([[lista.setLista][0]][0]);
+    async function ListaAparelhos() {
+        var requestOptionsAparelhoAq = {
+            method: 'GET',
+            redirect: 'follow',
+        };
+        await fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptionsAparelhoAq)
+            .then(response => response.json())
+            .then(result => ListaAparelhosAq.setListaAparelhosAq = (result))
+            .catch(error => console.log('error', error));
+
+    }
+    var saidaAparelhos = []
+    var obj = ([[ListaAparelhosAq.setListaAparelhosAq][0]][0]);
     for (var i in obj)
-        saida.push(obj[i]);
-
+        saidaAparelhos.push(obj[i]);
     // FETCH USUÁRIOS
-
     var [listaUsuarioAq, setListaUsuarioAq] = useState([]);
-    var requestOptionsUsuariosAq = {
-        method: 'GET',
-        redirect: 'follow',
-    };
-    fetch("https://sisce.herokuapp.com/sisce/usuarios", requestOptionsUsuariosAq)
-        .then(response => response.json())
-        .then(result => listaUsuarioAq.setListaUsuarioAq = (result))
-        .catch(error => console.log('error', error));
+    async function listaUsuarios() {
+        
+        var requestOptionsUsuariosAq = {
+            method: 'GET',
+            redirect: 'follow',
+        };
+        await fetch("https://sisce.herokuapp.com/sisce/usuarios", requestOptionsUsuariosAq)
+            .then(response => response.json())
+            .then(result => listaUsuarioAq.setListaUsuarioAq = (result))
+            .catch(error => console.log('error', error));
+    }
 
-    var saidaUsuarioAq = []
+    var saidaUsuariosAq = []
     var obj = ([[listaUsuarioAq.setListaUsuarioAq][0]][0]);
     for (var i in obj)
-        saidaUsuarioAq.push(obj[i]);
+    saidaUsuariosAq.push(obj[i]);   
     var curr = new Date();
-    var date = [curr.getFullYear(),curr.getUTCMonth(),curr.getUTCDate(), curr.getHours(), curr.getMinutes()]
+    var date = [curr.getFullYear(), curr.getUTCMonth(), curr.getUTCDate(), curr.getHours(), curr.getMinutes()]
     return (
         <div>
             <Fab className={classes.fab} onClick={handleClick} color="primary" style={{ position: "fixed", backgroundColor: "#0b102d" }}>
@@ -708,7 +713,7 @@ export default function CustomizedMenus() {
                     </ListItemIcon>
                     <ListItemText primary="• Registrar Locação de Aparelho" />
                 </StyledMenuItem>
-                <Dialog open={openAquisicao}  onClose={handleCloseFormAquisicao} aria-labelledby="form-dialog-title">
+                <Dialog open={openAquisicao} onClose={handleCloseFormAquisicao} aria-labelledby="form-dialog-title">
                     <form onSubmit={handleSubmitAquisicao}>
                         <DialogTitle id="form-dialog-title">Registrar Nova Locação</DialogTitle>
 
@@ -740,9 +745,10 @@ export default function CustomizedMenus() {
                         </FormControl> */}
 
                             <Autocomplete
+                                onFocus={ListaAparelhos}
                                 id="combo-box-demo"
                                 fullWidth="true"
-                                options={saida}
+                                options={saidaAparelhos}
                                 getOptionLabel={(option) => (option.marca + ' ' + option.modelo + ' ' + option.mac)}
                                 style={{ width: "100%" }}
                                 renderInput={(params) => <TextField {...params} label="Aparelho (Marca Modelo Mac)" variant="outlined" />}
@@ -752,9 +758,10 @@ export default function CustomizedMenus() {
                             />
 
                             <Autocomplete
+                                onFocus={listaUsuarios}
                                 id="combo-box-demo"
                                 fullWidth="true"
-                                options={saidaUsuarioAq}
+                                options={saidaUsuariosAq}
                                 getOptionLabel={(option) => (option.nome)}
                                 style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
                                 renderInput={(params) => <TextField {...params} label="Usuário (Nome Completo)" variant="outlined" />}
@@ -768,8 +775,8 @@ export default function CustomizedMenus() {
                                 label="Data e Hora da Locação"
                                 type="datetime-local"
                                 onChange={handleChangeDataaq}
-                                style={{marginBottom:"10px"}}
-                                defaultValue={date[0]+'-0'+(date[1]+1)+'-'+date[2]+'T'+date[3]+':'+date[4]}
+                                style={{ marginBottom: "10px" }}
+                                defaultValue={date[0] + '-0' + (date[1] + 1) + '-' + date[2] + 'T' + date[3] + ':' + date[4]}
                                 className={classes.textField}
                                 InputLabelProps={{
                                     shrink: true,
