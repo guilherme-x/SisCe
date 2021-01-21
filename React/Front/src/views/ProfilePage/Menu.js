@@ -526,8 +526,6 @@ export default function CustomizedMenus() {
             handleClickFail();
             handleCloseLoading();
         }
-        window.location.reload(false);
-
     }
 
     // VARIÁVEIS PARA INSERÇÃO DE NOVA AQUISIÇÃO
@@ -710,7 +708,7 @@ export default function CustomizedMenus() {
                     </ListItemIcon>
                     <ListItemText primary="• Registrar Locação de Aparelho" />
                 </StyledMenuItem>
-                <Dialog open={openAquisicao} onClose={handleCloseFormAquisicao} aria-labelledby="form-dialog-title">
+                <Dialog open={openAquisicao}  onClose={handleCloseFormAquisicao} aria-labelledby="form-dialog-title">
                     <form onSubmit={handleSubmitAquisicao}>
                         <DialogTitle id="form-dialog-title">Registrar Nova Locação</DialogTitle>
 

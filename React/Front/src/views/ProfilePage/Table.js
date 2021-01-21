@@ -8,7 +8,22 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useState } from 'react';
-
+import EditIcon from '@material-ui/icons/Edit';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+const PurpleSwitch = withStyles({
+  switchBase: {
+    color: "#0b102d",
+    '&$checked': {
+      color: "black",
+    },
+    '&$checked + $track': {
+      backgroundColor: "#000",
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -53,51 +68,126 @@ const useStyles = makeStyles({
 });
 
 export default function CustomizedTables() {
-  var [lista, setLista] = useState([]);
-var requestOptions = {
-  method: 'GET',
-  redirect: 'follow',
-};
-var saida = []
-async function listar() {
-  await fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptions)
-    .then(response => response.json())
-    .then(result => setLista(result))
-    .catch(error => console.log('error', error));
-}
-var obj = ([[lista][0]][0]);
-for (var i in obj)
-  saida.push(obj[i]);
-  console.log(obj)
-listar();
+  const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+    checkedC: true,
+  });
+
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+  // FETCH APARELHOS
+  var [listaAparelhos, setListaAparelhos] = useState([]);
+  var requestOptionsAparelhos = {
+    method: 'GET',
+    redirect: 'follow',
+  };
+  var saidaAparelhos = []
+  async function listarAparelhos() {
+    await fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptionsAparelhos)
+      .then(response => response.json())
+      .then(result => setListaAparelhos(result))
+      .catch(error => console.log('error', error));
+  }
+  var obj = ([[listaAparelhos][0]][0]);
+  for (var i in obj)
+    saidaAparelhos.push(obj[i]);
+  listarAparelhos();
+
+  // FETCH USUÁRIOS
+
+  var [listaUsuarios, setListaUsuarios] = useState([]);
+  var requestOptionsUsuarios = {
+    method: 'GET',
+    redirect: 'follow',
+  };
+  var saidaUsuarios = []
+  async function listarUsuarios() {
+    await fetch("https://sisce.herokuapp.com/sisce/usuarios", requestOptionsUsuarios)
+      .then(response => response.json())
+      .then(result => setListaUsuarios(result))
+      .catch(error => console.log('error', error));
+  }
+  var obj = ([[listaUsuarios][0]][0]);
+  for (var i in obj)
+    saidaUsuarios.push(obj[i]);
+  listarUsuarios();
 
   const classes = useStyles();
 
   return (
-    <TableContainer style={{marginBottom:"2em"}} component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <h3 style={{ width: "100%", textAlign: "center" }}>Aparelhos Cadastrados</h3>
-          <TableRow >
-            <StyledTableCell style={{ backgroundColor: "#0b102d" }}>Marca</StyledTableCell>
-            <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="right">Modelo</StyledTableCell>
-            <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="right">Sistema Operacional</StyledTableCell>
-            <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="right">Processador</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {saida.map((saida) => (
-            <StyledTableRow key={saida.idaparelho}>
-              <StyledTableCell>
-                {saida.marca}
-              </StyledTableCell>
-              <StyledTableCell align="right">{saida.modelo}</StyledTableCell>
-              <StyledTableCell align="right">{saida.so}</StyledTableCell>
-              <StyledTableCell align="right">{saida.processador}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div>
+      <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
+        <h3 style={{ width: "100%", textAlign: "center" }}>Aparelhos Cadastrados</h3>
+
+        <Table className={classes.table} aria-label="customized table">
+
+          <TableHead>
+            <TableRow >
+              <StyledTableCell style={{ backgroundColor: "#0b102d", width: "20%" }} align="center">Marca</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Modelo</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Sistema Operacional</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Processador</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Observações</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Opções</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {saidaAparelhos.map((saidaAparelhos) => (
+              <StyledTableRow key={saidaAparelhos.idaparelho}>
+                <StyledTableCell align="center">
+                  {saidaAparelhos.marca}
+                </StyledTableCell>
+                <StyledTableCell align="center">{saidaAparelhos.modelo}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAparelhos.so}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAparelhos.processador}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAparelhos.obs}</StyledTableCell>
+                <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
+                  <FormControlLabel style={{marginLeft:"15px"}}
+                    control={<PurpleSwitch  onChange={handleChange} name="checkedA" />}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TableContainer style={{ marginBottom: "4em" }} component={Paper}>
+        <h3 id="tabelaUsuarios" style={{ width: "100%", textAlign: "center" }}>Usuários Cadastrados</h3>
+
+        <Table className={classes.table} aria-label="customized table">
+
+          <TableHead>
+            <TableRow >
+              <StyledTableCell style={{ backgroundColor: "#0b102d", width: "20%" }} align="center">Nome</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">CPF</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Telefone</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Cargo</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Setor</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Opções</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {saidaUsuarios.map((saidaUsuarios) => (
+              <StyledTableRow key={saidaUsuarios.idusuario}>
+                <StyledTableCell align="center">
+                  {saidaUsuarios.nome}
+                </StyledTableCell>
+                <StyledTableCell align="center">{saidaUsuarios.cpf}</StyledTableCell>
+                <StyledTableCell align="center">{saidaUsuarios.telefone}</StyledTableCell>
+                <StyledTableCell align="center">{saidaUsuarios.cargo}</StyledTableCell>
+                <StyledTableCell align="center">{saidaUsuarios.setor}</StyledTableCell>
+                <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
+                  <FormControlLabel style={{marginLeft:"15px"}}
+                    control={<PurpleSwitch  onChange={handleChange} name="checkedA" />}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }

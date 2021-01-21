@@ -4,11 +4,11 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
+import { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-
 const useStyles = makeStyles({
     root: {
-        minWidth: 275,
+        minWidth: 40,
     },
     bullet: {
         display: 'inline-block',
@@ -22,49 +22,84 @@ const useStyles = makeStyles({
         marginBottom: 12,
     },
 });
-
 export default function OutlinedCard() {
+
+    var [lista, setLista] = useState([]);
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+     var saida = []
+    async function listar() {
+      await fetch("https://sisce.herokuapp.com/sisce/aparelhos", requestOptions)
+        .then(response => response.json())
+        .then(result => setLista(result))
+        .catch(error => console.log('error', error));
+    }
+    var obj = ([[lista][0]][0]);
+    for (var i in obj)
+      saida.push(obj[i]);
+    listar();
+    
+// FETCH USUÁRIOS
+var [listaUsuarios, setListaUsuarios] = useState([]);
+var requestOptionsUsuarios = {
+  method: 'GET',
+  redirect: 'follow',
+};
+var saidaUsuarios = []
+async function listarUsuarios() {
+  await fetch("https://sisce.herokuapp.com/sisce/usuarios", requestOptionsUsuarios)
+    .then(response => response.json())
+    .then(result => setListaUsuarios(result))
+    .catch(error => console.log('error', error));
+}
+var obj = ([[listaUsuarios][0]][0]);
+for (var i in obj)
+  saidaUsuarios.push(obj[i]);
+listarUsuarios();
+
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
 
     return (
-        <div style={{ display: "flex", marginBottom:"2em" }}>
+        <div style={{ display: "flex", marginBottom:"2em", marginTop:"2em" }}>
 
-            <Card style={{ width: "35%", marginRight: "1.2em" }} className={classes.root} variant="outlined">
+            <Card style={{ width: "40%", marginRight: "2.2em", boxShadow:"0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)" }} className={classes.root} variant="outlined">
                 <CardContent>
-                    <Typography style={{ fontSize: "1.5em" }} className={classes.title} color="textSecondary" gutterBottom>
+                    <Typography style={{ fontSize: "150%" }} className={classes.title} color="textSecondary" gutterBottom>
                         Aparelhos cadastrados
         </Typography>
                     <Typography style={{ color: "#0b102d" }} variant="h2" component="h2">
-                        19
+                        {saida.length}
         </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">VER TODOS</Button>
+                    <Button color="primary" style={{"&:hover":{color:"red"}}} href="#tabela" size="small">VER TODOS</Button>
                 </CardActions>
             </Card>
-            <Card style={{ width: "35%", marginRight: "1.2em" }} className={classes.root} variant="outlined">
+            <Card style={{ width: "40%", marginRight: "2.2em", boxShadow:"0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)" }} className={classes.root} variant="outlined">
                 <CardContent>
-                    <Typography style={{ fontSize: "1.5em" }} className={classes.title} color="textSecondary" gutterBottom>
+                    <Typography style={{ fontSize: "150%" }} className={classes.title} color="textSecondary" gutterBottom>
                         Usuários cadastrados        </Typography>
                     <Typography style={{ color: "#0b102d" }} variant="h2" component="h2">
-                        13
+                        {saidaUsuarios.length}
         </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">VER TODOS</Button>
+                    <Button href="#tabelaUsuarios" size="small">VER TODOS</Button>
                 </CardActions>
             </Card>
-            <Card style={{ width: "35%", marginRight: "1.2em" }} className={classes.root} variant="outlined">
+            <Card style={{ width: "40%", marginRight: "0",boxShadow:"0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)" }} className={classes.root} variant="outlined">
                 <CardContent>
-                    <Typography style={{ fontSize: "1.5em" }} className={classes.title} color="textSecondary" gutterBottom>
+                    <Typography style={{ fontSize: "150%" }} className={classes.title} color="textSecondary" gutterBottom>
                         Locações registradas        </Typography>
                     <Typography style={{ color: "#0b102d" }} variant="h2" component="h2">
-                        26
+                        5
         </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">VER TODAS</Button>
+                    <Button id="tabela" size="small">VER TODAS</Button>
                 </CardActions>
             </Card>
         </div>
