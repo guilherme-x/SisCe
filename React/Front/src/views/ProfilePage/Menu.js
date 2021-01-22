@@ -490,6 +490,7 @@ export default function CustomizedMenus() {
             handleClickFail();
             handleCloseLoading();
         }
+        window.location.reload();
 
     }
 
@@ -608,7 +609,8 @@ export default function CustomizedMenus() {
     const [openAparelhoAq, setOpenAparelhoAq] = React.useState(false);
 
     const handleChangeAparelhoAq = (event) => {
-        setAparelhoAq(event.target.value);
+        setAparelhoAq(event.target.value.idaparelho)
+        alert(AparelhoAq);
     };
 
     const handleCloseAparelhoAq = () => {
@@ -745,7 +747,7 @@ export default function CustomizedMenus() {
                         </FormControl> */}
 
                             <Autocomplete
-                                onFocus={ListaAparelhos}
+                                onClick={ListaAparelhos()}
                                 id="combo-box-demo"
                                 fullWidth="true"
                                 options={saidaAparelhos}
@@ -753,19 +755,19 @@ export default function CustomizedMenus() {
                                 style={{ width: "100%" }}
                                 renderInput={(params) => <TextField {...params} label="Aparelho (Marca Modelo Mac)" variant="outlined" />}
                                 inputProps={{
-                                    onChange: e => setAparelhoAq(e.target.value.idaparelho)
+                                    onChange: e => handleChangeAparelhoAq
                                 }}
                             />
 
                             <Autocomplete
-                                onFocus={listaUsuarios}
+                                onClick={listaUsuarios()}
                                 id="combo-box-demo"
                                 fullWidth="true"
                                 options={saidaUsuariosAq}
                                 getOptionLabel={(option) => (option.nome)}
                                 style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
                                 renderInput={(params) => <TextField {...params} label="Usuário (Nome Completo)" variant="outlined" />}
-                                inputProps={{
+                                inputprops={{
                                     onChange: e => setUsuarioAq(e.target.value.idusuario)
                                 }}
                             />
@@ -950,6 +952,7 @@ export default function CustomizedMenus() {
                                     labelId="sistema-operacional-label"
                                     id="sistema-operacional"
                                     open={openMarca}
+                                    required={true}
                                     onClose={handleCloseMarca}
                                     onOpen={handleOpenMarca}
                                     value={Marca}
@@ -981,6 +984,7 @@ export default function CustomizedMenus() {
                                     onClose={handleCloseSo}
                                     onOpen={handleOpenSo}
                                     value={So}
+                                    required={true}
                                     fullWidth
                                     name="SistemaOperacional"
                                     onChange={handleChangeSo}
@@ -1000,6 +1004,7 @@ export default function CustomizedMenus() {
                                 margin="dense"
                                 id="modelo"
                                 name="modelo"
+                                required={true}
                                 label="Modelo"
                                 type="name"
                                 inputProps={{
@@ -1014,6 +1019,7 @@ export default function CustomizedMenus() {
                                 margin="dense"
                                 id="processador"
                                 name="processador"
+                                required={true}
                                 label="Processador"
                                 type="name"
                                 inputProps={{
@@ -1031,6 +1037,7 @@ export default function CustomizedMenus() {
                                     onOpen={handleOpenRam}
                                     value={Ram}
                                     fullWidth
+                                    required={true}
                                     name="memoria"
                                     onChange={handleChangeRam}
                                 >
@@ -1049,6 +1056,7 @@ export default function CustomizedMenus() {
                                 name="mac"
                                 label="Endereço MAC"
                                 type="text"
+                                required={true}
                                 inputProps={{
                                     onChange: e => setMac(e.target.value)
                                 }}

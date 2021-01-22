@@ -59,13 +59,12 @@ for (var i in obj)
 
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
-    useEffect(() => {
-        const interval = setInterval(() => {
-          listarAparelhos();
-          listarUsuarios();
-        }, 5000);
-        return () => clearInterval(interval);
-      }, []);
+    
+    function FecthData(){
+        listarAparelhos();
+        listarUsuarios();
+    }
+    window.onload = FecthData();
 
     return (
         <div style={{ display: "flex", marginBottom:"2em", marginTop:"2em" }}>
