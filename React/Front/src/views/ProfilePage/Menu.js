@@ -563,14 +563,11 @@ export default function CustomizedMenus() {
 
     // VARIÁVEIS PARA INSERÇÃO DE DATA DA AQUISIÇÃO
 
-    const [formattedData, setFormattedData] = React.useState('');
     const [Dataaq, setDataaq] = React.useState('');
     const [openDataaq, setOpenDataaq] = React.useState(false);
 
     const handleChangeDataaq = (event) => {
         setDataaq(event.target.value);
-        setFormattedData(Dataaq.replace(/T/i, ' '));
-        console.log(formattedData)
         console.log(UsuarioAq);
         console.log(AparelhoAq);
     };
@@ -655,11 +652,11 @@ export default function CustomizedMenus() {
             handleClickFail();
             handleCloseLoading();
         }
-console.log(UsuarioAq)
-console.log(AparelhoAq)
-console.log(Dataaq)
+        console.log(UsuarioAq)
+        console.log(AparelhoAq)
+        console.log(Dataaq)
 
-}
+    }
 
     // FETCH APARELHOS
     var [ListaAparelhosAq, setListaAparelhosAq] = useState([]);
@@ -754,7 +751,7 @@ console.log(Dataaq)
                                 id="combo-box-demo"
                                 fullWidth="true"
                                 options={saidaAparelhos}
-                                getOptionLabel={(option) => (option.idaparelho + ' ' + option.marca + ' ' + option.modelo + ' ' + option.mac)}
+                                getOptionLabel={(option) => (option.idaparelho + ' ' + option.marca + ' ' + option.modelo + ' ' + option.mac_wlan)}
                                 getOptionSelected={(option, value) => option.idaparelho === value.idaparelho}
                                 style={{ width: "100%" }}
                                 onChange={(event, value) => setAparelhoAq(value.idaparelho)}
@@ -771,14 +768,14 @@ console.log(Dataaq)
                                 getOptionSelected={(option, value) => option.idusuario === value.idusuario}
                                 style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
                                 renderInput={(params) => <TextField {...params} label="Usuário (Nome Completo)" variant="outlined" />}
-        
+
                             />
                             <TextField
                                 id="datetime-local"
                                 fullWidth
                                 label="Data e Hora da Locação"
                                 type="datetime-local"
-                                onChange={handleChangeDataaq}
+                                onMouseOver={handleChangeDataaq}
                                 style={{ marginBottom: "10px" }}
                                 defaultValue={date[0] + '-0' + (date[1] + 1) + '-' + date[2] + 'T' + date[3] + ':' + date[4]}
                                 className={classes.textField}

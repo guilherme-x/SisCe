@@ -24,6 +24,26 @@ const useStyles = makeStyles({
 });
 export default function OutlinedCard() {
 
+    // FETCH AQUISIÇÕES
+
+  var [ListaAquisicoes, setListaAquisicoes] = useState([]);
+  var requestOptionsAquisicoes = {
+    method: 'GET',
+    redirect: 'follow',
+  };
+  var saidaAquisicoes = []
+  async function listarAquisicoes() {
+    await fetch("https://sisce.herokuapp.com/sisce/aquisicoes", requestOptionsAquisicoes)
+      .then(response => response.json())
+      .then(result => setListaAquisicoes(result))
+      .catch(error => console.log('error', error));
+  }
+  var obj = ([[ListaAquisicoes][0]][0]);
+  for (var i in obj)
+    saidaAquisicoes.push(obj[i]);
+
+    // FETCH APARELHOS
+
     var [lista, setLista] = useState([]);
     var requestOptions = {
       method: 'GET',
@@ -63,6 +83,7 @@ for (var i in obj)
     function FecthDataCount(){
         listarAparelhos();
         listarUsuarios();
+        listarAquisicoes();
     }
     window.onpageshow = FecthDataCount;
 
@@ -99,7 +120,7 @@ for (var i in obj)
                     <Typography style={{ fontSize: "150%" }} className={classes.title} color="textSecondary" gutterBottom>
                         Locações registradas        </Typography>
                     <Typography style={{ color: "#0b102d" }} variant="h2" component="h2">
-                        5
+                        {saidaAquisicoes.length}
         </Typography>
                 </CardContent>
                 <CardActions>

@@ -8,6 +8,8 @@ import Icon from "@material-ui/core/Icon";
 import People from "@material-ui/icons/People";
 // core components
 import Header from "components/Header/Header.js";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -33,7 +35,7 @@ import history from "../../history";
 
 const useStyles = makeStyles(styles);
 
-const BackStyle = makeStyles((theme) =>({
+const BackStyle = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
@@ -66,6 +68,8 @@ export default function LoginPage({ setToken }) {
     redirect: 'follow'
   };
   var output;
+
+
   const [openLoading, setOpenLoading] = React.useState(false);
   const handleCloseLoading = () => {
     setOpenLoading(false);
@@ -74,6 +78,39 @@ export default function LoginPage({ setToken }) {
     setOpenLoading(!openLoading);
   };
 
+
+  const [openSucess, setOpenSucess] = React.useState(false);
+
+  const handleClickSucess = () => {
+    setOpenSucess(true);
+  };
+
+  const handleCloseSucess = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSucess(false);
+  };
+
+  const [openFail, setOpenFail] = React.useState(false);
+
+  const handleClickFail = () => {
+    setOpenFail(true);
+  };
+
+  const handleCloseFail = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenFail(false);
+  };
+
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
   function SimpleBackdrop() {
 
     return (
@@ -94,10 +131,12 @@ export default function LoginPage({ setToken }) {
 
     if (lista.setLista == "true") {
       localStorage.setItem('app-token', "true");
-      history.push('/painel');
       handleCloseLoading()
+      history.push('/painel');
+      window.location.reload();
+      handleClickSucess();
     } else {
-      alert("Informações Incorretas");
+      handleClickFail()
       handleCloseLoading()
 
     }
@@ -113,7 +152,7 @@ export default function LoginPage({ setToken }) {
   return (
     <div>
       <div
-      
+
         className={classes.pageHeader}
         style={{
           backgroundImage: "url(" + image + ")",
@@ -122,7 +161,7 @@ export default function LoginPage({ setToken }) {
           filter: "brightness(110%)"
         }}
       >
-              <SimpleBackdrop />
+        <SimpleBackdrop />
 
         <img src={require("assets/img/micks.png")}
           style={{
@@ -195,9 +234,18 @@ export default function LoginPage({ setToken }) {
             </GridItem>
           </GridContainer>
         </div>
-        {/* <Footer whiteFont /> */}
       </div>
+      <Snackbar open={openSucess} autoHideDuration={6000} onClose={handleCloseSucess}>
+          <Alert onClose={handleCloseSucess} severity="success">
+            Cadastrado com Sucesso!
+        </Alert>
+        </Snackbar>
 
+        <Snackbar open={openFail} autoHideDuration={6000} onClose={handleCloseFail}>
+          <Alert onClose={handleCloseFail} severity="error">
+            Ocorreu um Erro!
+        </Alert>
+        </Snackbar>
     </div>
   );
 };

@@ -11,6 +11,9 @@ import { useState } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Moment from 'moment';
+import 'moment/locale/pt-br'
+
 const PurpleSwitch = withStyles({
   switchBase: {
     color: "#0b102d",
@@ -93,8 +96,6 @@ export default function CustomizedTables() {
   var obj = ([[listaAparelhos][0]][0]);
   for (var i in obj)
     saidaAparelhos.push(obj[i]);
-
-
   // FETCH USUÁRIOS
 
   var [listaUsuarios, setListaUsuarios] = useState([]);
@@ -113,14 +114,76 @@ export default function CustomizedTables() {
   for (var i in obj)
     saidaUsuarios.push(obj[i]);
 
+  // FETCH AQUISIÇÕES
+
+  var [ListaAquisicoes, setListaAquisicoes] = useState([]);
+  var requestOptionsAquisicoes = {
+    method: 'GET',
+    redirect: 'follow',
+  };
+  var saidaAquisicoes = []
+  async function listarAquisicoes() {
+    await fetch("https://sisce.herokuapp.com/sisce/aquisicoes", requestOptionsAquisicoes)
+      .then(response => response.json())
+      .then(result => setListaAquisicoes(result))
+      .catch(error => console.log('error', error));
+  }
+  var obj = ([[ListaAquisicoes][0]][0]);
+  for (var i in obj)
+    saidaAquisicoes.push(obj[i]);
+
+  const PtData = (data) => {
+    var hora = Moment(data).format('llll');
+    Moment.locale('pt-br')
+    return hora
+  }
+
   const classes = useStyles();
   function fetchData() {
+    listarAquisicoes();
     listarUsuarios();
     listarAparelhos();
   }
   window.onload = fetchData;
   return (
     <div>
+      <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
+        <h3 style={{ width: "100%", textAlign: "center" }}>Locações Registradas</h3>
+
+        <Table className={classes.table} aria-label="customized table">
+
+          <TableHead>
+            <TableRow >
+              <StyledTableCell style={{ backgroundColor: "#0b102d", width: "20%" }} align="center">Colaborador</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Marca do Aparelho</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Modelo do Aparelho</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Mac do Aparelho</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Data da Locação</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Motivo</StyledTableCell>
+              <StyledTableCell style={{ backgroundColor: "#0b102d" }} align="center">Opções</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {saidaAquisicoes.map((saidaAquisicoes) => (
+              <StyledTableRow key={saidaAquisicoes.idaquisicao}>
+                <StyledTableCell align="center">
+                  {saidaAquisicoes.nome}
+                </StyledTableCell>
+                <StyledTableCell align="center">{saidaAquisicoes.marca}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAquisicoes.modelo}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAquisicoes.mac_wlan}</StyledTableCell>
+                <StyledTableCell align="center">{PtData(saidaAquisicoes.data_aquisicao)}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAquisicoes.motivo}</StyledTableCell>
+                <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
+                  <FormControlLabel style={{ marginLeft: "15px" }}
+                    control={<PurpleSwitch onChange={handleChange} name="checkedA" />}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
         <h3 style={{ width: "100%", textAlign: "center" }}>Aparelhos Cadastrados</h3>
 
@@ -143,7 +206,7 @@ export default function CustomizedTables() {
                   {saidaAparelhos.marca}
                 </StyledTableCell>
                 <StyledTableCell align="center">{saidaAparelhos.modelo}</StyledTableCell>
-                <StyledTableCell align="center">{saidaAparelhos.so}</StyledTableCell>
+                <StyledTableCell align="center">{saidaAparelhos.sistema_operacional}</StyledTableCell>
                 <StyledTableCell align="center">{saidaAparelhos.processador}</StyledTableCell>
                 <StyledTableCell align="center">{saidaAparelhos.obs}</StyledTableCell>
                 <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
