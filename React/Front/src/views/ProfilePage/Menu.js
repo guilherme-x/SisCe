@@ -299,6 +299,7 @@ export default function CustomizedMenus() {
     const handleCloseFormAparelho = () => {
         setAparelho(false);
         handleClose();
+        window.location.reload();
     };
 
     // VARIÁVEIS PARA INSERÇÃO DE MARCA DO APARELHO
@@ -609,7 +610,7 @@ export default function CustomizedMenus() {
     const [openAparelhoAq, setOpenAparelhoAq] = React.useState(false);
 
     const handleChangeAparelhoAq = (event) => {
-        setAparelhoAq(event.target.value.idaparelho)
+        setAparelhoAq(event.target.value)
         alert(AparelhoAq);
     };
 
@@ -627,7 +628,7 @@ export default function CustomizedMenus() {
 
     var urlaquisicao = new URLSearchParams();
     urlaquisicao.append("motivo", MotivoAq);
-    urlaquisicao.append("data_aquisicao", formattedData);
+    urlaquisicao.append("data_aquisicao", Dataaq);
     urlaquisicao.append("fk_usuario", UsuarioAq);
     urlaquisicao.append("fk_aparelho", AparelhoAq);
 
@@ -654,9 +655,11 @@ export default function CustomizedMenus() {
             handleClickFail();
             handleCloseLoading();
         }
-        window.location.reload(false);
+console.log(UsuarioAq)
+console.log(AparelhoAq)
+console.log(Dataaq)
 
-    }
+}
 
     // FETCH APARELHOS
     var [ListaAparelhosAq, setListaAparelhosAq] = useState([]);
@@ -679,7 +682,7 @@ export default function CustomizedMenus() {
     // FETCH USUÁRIOS
     var [listaUsuarioAq, setListaUsuarioAq] = useState([]);
     async function listaUsuarios() {
-        
+
         var requestOptionsUsuariosAq = {
             method: 'GET',
             redirect: 'follow',
@@ -693,7 +696,7 @@ export default function CustomizedMenus() {
     var saidaUsuariosAq = []
     var obj = ([[listaUsuarioAq.setListaUsuarioAq][0]][0]);
     for (var i in obj)
-    saidaUsuariosAq.push(obj[i]);   
+        saidaUsuariosAq.push(obj[i]);
     var curr = new Date();
     var date = [curr.getFullYear(), curr.getUTCMonth(), curr.getUTCDate(), curr.getHours(), curr.getMinutes()]
     return (
@@ -751,25 +754,24 @@ export default function CustomizedMenus() {
                                 id="combo-box-demo"
                                 fullWidth="true"
                                 options={saidaAparelhos}
-                                getOptionLabel={(option) => (option.marca + ' ' + option.modelo + ' ' + option.mac)}
+                                getOptionLabel={(option) => (option.idaparelho + ' ' + option.marca + ' ' + option.modelo + ' ' + option.mac)}
+                                getOptionSelected={(option, value) => option.idaparelho === value.idaparelho}
                                 style={{ width: "100%" }}
+                                onChange={(event, value) => setAparelhoAq(value.idaparelho)}
                                 renderInput={(params) => <TextField {...params} label="Aparelho (Marca Modelo Mac)" variant="outlined" />}
-                                inputProps={{
-                                    onChange: e => handleChangeAparelhoAq
-                                }}
                             />
 
                             <Autocomplete
                                 onClick={listaUsuarios()}
                                 id="combo-box-demo"
                                 fullWidth="true"
+                                onChange={(event, value) => setUsuarioAq(value.idusuario)}
                                 options={saidaUsuariosAq}
                                 getOptionLabel={(option) => (option.nome)}
+                                getOptionSelected={(option, value) => option.idusuario === value.idusuario}
                                 style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
                                 renderInput={(params) => <TextField {...params} label="Usuário (Nome Completo)" variant="outlined" />}
-                                inputprops={{
-                                    onChange: e => setUsuarioAq(e.target.value.idusuario)
-                                }}
+        
                             />
                             <TextField
                                 id="datetime-local"

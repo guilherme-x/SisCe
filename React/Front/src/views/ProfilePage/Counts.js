@@ -60,11 +60,11 @@ for (var i in obj)
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
     
-    function FecthData(){
+    function FecthDataCount(){
         listarAparelhos();
         listarUsuarios();
     }
-    window.onload = FecthData();
+    window.onpageshow = FecthDataCount;
 
     return (
         <div style={{ display: "flex", marginBottom:"2em", marginTop:"2em" }}>

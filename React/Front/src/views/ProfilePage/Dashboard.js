@@ -63,11 +63,11 @@ export default function Dashboard() {
       <Container fixed>
         <GridContainer>
           <GridItem>
-            <CustomizedMenu/>
+            <CustomizedMenu />
           </GridItem>
         </GridContainer>
-        <OutLinedCard/>
-        <CustomizedTables/>
+        <OutLinedCard />
+        <CustomizedTables />
       </Container>
     </div>
   )

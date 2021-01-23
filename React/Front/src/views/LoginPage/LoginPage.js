@@ -1,5 +1,5 @@
-import React, {componentDidMount} from 'react';
-import {useState} from 'react';
+import React, { componentDidMount } from 'react';
+import { useState } from 'react';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -27,29 +27,38 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import image from "assets/img/back.jpg";
 import logoMicks from "assets/img/micks.png";
-import { withRouter } from 'react-router-dom'; 
+import { withRouter } from 'react-router-dom';
 import history from "../../history";
 
 
 const useStyles = makeStyles(styles);
+
+const BackStyle = makeStyles((theme) =>({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}))
+
 // export const obj ='';
 export var isAuthenticated = () => '';
-export default function LoginPage({setToken}) {
+export default function LoginPage({ setToken }) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  setTimeout(function() {
+  setTimeout(function () {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
+  const classesBack = BackStyle();
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
- 
+
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-  var [lista,setLista] = useState([]);
+  var [lista, setLista] = useState([]);
   var urlencoded = new URLSearchParams();
   urlencoded.append("login", login);
   urlencoded.append("senha", senha);
-  
+
   var requestOptions = {
     method: 'POST',
     headers: myHeaders,
@@ -59,74 +68,80 @@ export default function LoginPage({setToken}) {
   var output;
   const [openLoading, setOpenLoading] = React.useState(false);
   const handleCloseLoading = () => {
-      setOpenLoading(false);
+    setOpenLoading(false);
   };
   const handleToggleLoading = () => {
-      setOpenLoading(!openLoading);
+    setOpenLoading(!openLoading);
   };
 
   function SimpleBackdrop() {
 
-      return (
-          <div>
-              <Backdrop className={classes.backdrop} open={openLoading} onClick={handleCloseLoading}>
-                  <CircularProgress color="inherit" />
-              </Backdrop>
-          </div>
-      );
+    return (
+      <div>
+        <Backdrop className={classesBack.backdrop} open={openLoading} onClick={handleCloseLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
+    );
   }
-  async function handleSubmit(evt){
-    handleCloseLoading();
+  async function handleSubmit(evt) {
+    handleToggleLoading();
     evt.preventDefault();
     await fetch("https://sisce.herokuapp.com/sisce/login", requestOptions)
-    .then(response => response.text())
-    .then(result => lista.setLista = result)
-    .catch(error => console.log('error', error));
-    
-    if (lista.setLista == "true"){
-      localStorage.setItem('app-token',"true");
+      .then(response => response.text())
+      .then(result => lista.setLista = result)
+      .catch(error => console.log('error', error));
+
+    if (lista.setLista == "true") {
+      localStorage.setItem('app-token', "true");
       history.push('/painel');
-    }else{
+      handleCloseLoading()
+    } else {
       alert("Informações Incorretas");
+      handleCloseLoading()
+
     }
-}
+  }
 
 
 
-const imageClasses = classNames(
-  classes.imgRaised,
-  classes.imgRoundedCircle,
-  classes.imgFluid
-);
+  const imageClasses = classNames(
+    classes.imgRaised,
+    classes.imgRoundedCircle,
+    classes.imgFluid
+  );
   return (
-    <div> 
+    <div>
       <div
+      
         className={classes.pageHeader}
         style={{
           backgroundImage: "url(" + image + ")",
           backgroundSize: "cover",
           backgroundPosition: "top center",
-          filter:"brightness(110%)"
+          filter: "brightness(110%)"
         }}
       >
-      <img src ={require("assets/img/micks.png")}
-      style={{
-        transform:"opacity(500%)",
-        background:"none",
-        display:"flex",
-        flex:"1",
-        paddingTop:"30px",
-        marginBottom:"-80px",
-        width:"30%",
-        marginRight:"auto",
-        marginLeft:"auto",
-      }}
-      alt="..."/>
+              <SimpleBackdrop />
+
+        <img src={require("assets/img/micks.png")}
+          style={{
+            transform: "opacity(500%)",
+            background: "none",
+            display: "flex",
+            flex: "1",
+            paddingTop: "30px",
+            marginBottom: "-80px",
+            width: "30%",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+          alt="..." />
         <div className={classes.container}>
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
-                <form  onSubmit={handleSubmit} className={classes.form}>
+                <form onSubmit={handleSubmit} className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Login</h4>
                   </CardHeader>
@@ -139,9 +154,9 @@ const imageClasses = classNames(
                         fullWidth: true
                       }}
                       inputProps={{
-                        onChange:e => setLogin(e.target.value),
+                        onChange: e => setLogin(e.target.value),
                         type: "text",
-                        required:true,
+                        required: true,
                         endAdornment: (
                           <InputAdornment position="end">
                             <People className={classes.inputIconsColor} />
@@ -156,9 +171,9 @@ const imageClasses = classNames(
                         fullWidth: true
                       }}
                       inputProps={{
-                        onChange:e => setSenha(e.target.value),
+                        onChange: e => setSenha(e.target.value),
                         type: "password",
-                        required:"true",
+                        required: "true",
                         endAdornment: (
                           <InputAdornment position="end">
                             <Icon className={classes.inputIconsColor}>
@@ -182,7 +197,7 @@ const imageClasses = classNames(
         </div>
         {/* <Footer whiteFont /> */}
       </div>
-      <SimpleBackdrop/>
+
     </div>
   );
 };

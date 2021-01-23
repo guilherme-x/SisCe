@@ -114,11 +114,11 @@ export default function CustomizedTables() {
     saidaUsuarios.push(obj[i]);
 
   const classes = useStyles();
-function fetchData(){
-  listarUsuarios();
-  listarAparelhos();
-}
-window.onload = fetchData;
+  function fetchData() {
+    listarUsuarios();
+    listarAparelhos();
+  }
+  window.onload = fetchData;
   return (
     <div>
       <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
