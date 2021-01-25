@@ -38,11 +38,18 @@ import CustomizedMenu from "./Menu"
 import Aparelhos from "./Aparelhos";
 import CustomizedTables from "./Table"
 import OutLinedCard from "./Counts"
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
     },
+  },
+  fab: {
+    margin: theme.spacing.unit, // You might not need this now
+    position: "fixed",
+    bottom: theme.spacing.unit * 2,
+    left: theme.spacing.unit * 1
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -51,15 +58,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
 
+
   const classes = useStyles();
+  const [fabVisible, setFabVisible] = useState('');
+
+  function handleScrolButton() {
+    if (window.pageYOffset > 105) {
+      setFabVisible(true)
+    }else{
+      setFabVisible(false)
+    }
+    console.log(window.pageYOffset)
+  }
+  const scrollTop = () =>{
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  };
 
   return (
-    <div>
+    <div onWheel={handleScrolButton}>
       <PrimarySearchAppBar style={{ backgroundColor: "#0b102d" }} />
       <div>
         <br /><br /><br />
       </div>
-
+      { fabVisible ? <Fab style={{position:"fixed", backgroundColor:"white"}} onClick={scrollTop} className={classes.fab}> <KeyboardArrowUpIcon style={{color:"#0b102d"}} /> </Fab> : null}
       <Container fixed>
         <GridContainer>
           <GridItem>

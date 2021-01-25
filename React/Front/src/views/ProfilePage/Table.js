@@ -16,12 +16,12 @@ import 'moment/locale/pt-br'
 
 const PurpleSwitch = withStyles({
   switchBase: {
-    color: "#0b102d",
+    color: "darkred",
     '&$checked': {
       color: "black",
     },
     '&$checked + $track': {
-      backgroundColor: "#000",
+      backgroundColor: "darkblue",
     },
   },
   checked: {},
@@ -147,7 +147,7 @@ export default function CustomizedTables() {
   window.onload = fetchData;
   return (
     <div>
-      <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
+      <TableContainer id="tabelaAquisicoes" style={{ marginBottom: "2em" }} component={Paper}>
         <h3 style={{ width: "100%", textAlign: "center" }}>Locações Registradas</h3>
 
         <Table className={classes.table} aria-label="customized table">
@@ -175,16 +175,13 @@ export default function CustomizedTables() {
                 <StyledTableCell align="center">{PtData(saidaAquisicoes.data_aquisicao)}</StyledTableCell>
                 <StyledTableCell align="center">{saidaAquisicoes.motivo}</StyledTableCell>
                 <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
-                  <FormControlLabel style={{ marginLeft: "15px" }}
-                    control={<PurpleSwitch onChange={handleChange} name="checkedA" />}
-                  />
                 </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <TableContainer style={{ marginBottom: "2em" }} component={Paper}>
+      <TableContainer id="tabelaAparelhos" style={{ marginBottom: "2em" }} component={Paper}>
         <h3 style={{ width: "100%", textAlign: "center" }}>Aparelhos Cadastrados</h3>
 
         <Table className={classes.table} aria-label="customized table">
@@ -211,7 +208,7 @@ export default function CustomizedTables() {
                 <StyledTableCell align="center">{saidaAparelhos.obs}</StyledTableCell>
                 <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
                   <FormControlLabel style={{ marginLeft: "15px" }}
-                    control={<PurpleSwitch onChange={handleChange} name="checkedA" />}
+                    control={<PurpleSwitch defaultChecked="true" onChange={handleChange} name="checkedA" />}
                   />
                 </StyledTableCell>
               </StyledTableRow>
@@ -245,9 +242,6 @@ export default function CustomizedTables() {
                 <StyledTableCell align="center">{saidaUsuarios.cargo}</StyledTableCell>
                 <StyledTableCell align="center">{saidaUsuarios.setor}</StyledTableCell>
                 <StyledTableCell align="center"><a><EditIcon style={{ color: "#0b102d" }} /></a>
-                  <FormControlLabel style={{ marginLeft: "15px" }}
-                    control={<PurpleSwitch onChange={handleChange} name="checkedA" />}
-                  />
                 </StyledTableCell>
               </StyledTableRow>
             ))}
